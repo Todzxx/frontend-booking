@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button, Chip } from "@heroui/react";
 import {
@@ -16,28 +15,15 @@ import {
 
 import { ThemeSwitcher } from "./theme-switcher";
 
-import api from "@/config/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const token = localStorage.getItem("token");
-  const [user, setUser] = useState<any>(null);
-
-  // Mengambil data user untuk menampilkan Nama dan Role di Sidebar
-  useEffect(() => {
-    if (token) {
-      api
-        .get("/auth/me")
-        .then((res) => setUser(res.data.data))
-        .catch(() => {});
-    }
-  }, [token]);
+  const { user, token, logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
-    setUser(null);
+    logout();
     navigate("/login");
   };
 

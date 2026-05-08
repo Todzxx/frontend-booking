@@ -1,27 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@heroui/react";
 import { Menu, X, LogOut } from "lucide-react";
 
 import { ThemeSwitcher } from "./theme-switcher";
 
-import api from "@/config/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const token = localStorage.getItem("token");
+  const { user, token, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    if (token) {
-      api
-        .get("/auth/me")
-        .then((res) => setUser(res.data.data))
-        .catch(() => {});
-    }
-  }, [token]);
 
   if (!token) {
     return (
@@ -133,7 +123,7 @@ export const Navbar = () => {
             className="h-14 rounded-2xl font-black"
             variant="danger-soft"
             onPress={() => {
-              localStorage.removeItem("token");
+              logout();
               navigate("/login");
               setIsMenuOpen(false);
             }}

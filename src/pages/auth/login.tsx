@@ -11,6 +11,7 @@ import {
 import { Lock, Mail, ShieldCheck, ArrowRight } from "lucide-react";
 
 import api from "@/config/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,6 +19,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,8 +30,11 @@ export default function LoginPage() {
       const response = await api.post("/auth/login", { email, password });
 
       if (response.data.status === "success" || response.data.data) {
-        localStorage.setItem("token", response.data.data.token);
-        localStorage.setItem("refreshToken", response.data.data.refreshToken);
+        login(
+          response.data.data.token,
+          response.data.data.refreshToken,
+          response.data.data.user,
+        );
         navigate(response.data.data.user?.role === "ADMIN" ? "/admin" : "/");
       }
     } catch (err: any) {
