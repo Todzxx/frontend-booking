@@ -345,7 +345,10 @@ export default function FacilitiesPage() {
             </Button>
           )}
           <div className="relative w-full md:w-80">
-            <InputGroup aria-label="Search facilities" className="rounded-2xl border-default-200">
+            <InputGroup
+              aria-label="Search facilities"
+              className="rounded-2xl border-default-200"
+            >
               <InputGroup.Prefix className="pl-3">
                 <Search className="text-default-400" size={18} />
               </InputGroup.Prefix>
@@ -364,12 +367,12 @@ export default function FacilitiesPage() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-96 bg-default-100 rounded-3xl animate-pulse"
+              className="h-96 bg-default-100 rounded-xl animate-pulse"
             />
           ))}
         </div>
       ) : filteredFacilities.length === 0 ? (
-        <Card className="p-20 flex flex-col items-center justify-center text-center bg-default-50/50 border-dashed border-2 border-default-200 rounded-3xl">
+        <Card className="p-20 flex flex-col items-center justify-center text-center bg-default-50/50 border-dashed border-2 border-default-200 rounded-xl">
           <MapPin className="text-default-300 mb-4" size={48} />
           <p className="text-muted text-lg font-bold">No facilities found.</p>
         </Card>
@@ -378,7 +381,7 @@ export default function FacilitiesPage() {
           {filteredFacilities.map((facility) => (
             <Card
               key={facility.id}
-              className="group overflow-hidden rounded-3xl hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 border border-default-200 bg-background/60 backdrop-blur-md"
+              className="group overflow-hidden rounded-xl hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 border border-default-200 bg-background/60 backdrop-blur-md"
             >
               <div className="h-48 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
@@ -483,11 +486,11 @@ export default function FacilitiesPage() {
         </Modal.Trigger>
         <Modal.Backdrop variant="blur">
           <Modal.Container scroll="inside">
-            <Modal.Dialog className="max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden rounded-[2.5rem] border border-default-200 bg-surface/90 backdrop-blur-xl p-2">
+            <Modal.Dialog className="max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden rounded-xl border border-default-200 bg-surface/90 backdrop-blur-xl p-2">
               {({ close }) => (
                 <div className="p-6 flex flex-col flex-1 min-h-0 overflow-y-auto">
                   <Modal.Header className="flex flex-col gap-1 items-center text-center px-4 pt-4">
-                    <div className="w-16 h-16 rounded-3xl bg-primary/10 text-primary flex items-center justify-center mb-4">
+                    <div className="w-16 h-16 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4">
                       <Calendar size={32} />
                     </div>
                     <Modal.Heading className="text-3xl font-black tracking-tight">
@@ -520,12 +523,12 @@ export default function FacilitiesPage() {
                     )}
 
                     {!(isEditMode || isCreateMode) && (
-                      <div className="space-y-3 rounded-3xl border border-default-200 bg-default-50/70 p-4">
+                      <div className="space-y-3 rounded-xl border border-default-200 bg-default-50/70 p-4">
                         <div className="flex items-center justify-between gap-3">
                           <div>
-                            <label className="text-sm font-black text-default-700">
+                            <p className="text-sm font-black text-default-700">
                               Slot Availability
-                            </label>
+                            </p>
                             <p className="text-[11px] font-bold text-default-400">
                               Booked times for the selected date.
                             </p>
@@ -533,7 +536,11 @@ export default function FacilitiesPage() {
                           <Clock className="text-primary shrink-0" size={18} />
                         </div>
 
-                        <TextField aria-label="Booking date" name="bookingDate" type="date">
+                        <TextField
+                          aria-label="Booking date"
+                          name="bookingDate"
+                          type="date"
+                        >
                           <InputGroup.Input
                             className="rounded-2xl"
                             value={bookingDate}
@@ -613,7 +620,11 @@ export default function FacilitiesPage() {
                             : "Event Purpose"}
                         </label>
                         <TextArea
-                          aria-label={isEditMode || isCreateMode ? "Room description" : "Event purpose"}
+                          aria-label={
+                            isEditMode || isCreateMode
+                              ? "Room description"
+                              : "Event purpose"
+                          }
                           className="rounded-2xl w-full text-left"
                           placeholder={
                             isEditMode || isCreateMode
@@ -661,13 +672,22 @@ export default function FacilitiesPage() {
                                   </Select.Trigger>
                                   <Select.Popover>
                                     <ListBox>
-                                      <ListBox.Item id="DAILY" textValue="Daily">
+                                      <ListBox.Item
+                                        id="DAILY"
+                                        textValue="Daily"
+                                      >
                                         Daily
                                       </ListBox.Item>
-                                      <ListBox.Item id="WEEKLY" textValue="Weekly">
+                                      <ListBox.Item
+                                        id="WEEKLY"
+                                        textValue="Weekly"
+                                      >
                                         Weekly
                                       </ListBox.Item>
-                                      <ListBox.Item id="MONTHLY" textValue="Monthly">
+                                      <ListBox.Item
+                                        id="MONTHLY"
+                                        textValue="Monthly"
+                                      >
                                         Monthly
                                       </ListBox.Item>
                                     </ListBox>
@@ -678,7 +698,11 @@ export default function FacilitiesPage() {
                                 <Label className="text-[10px] font-black uppercase text-default-400 ml-1">
                                   Count (Max 12)
                                 </Label>
-                                <TextField aria-label="Recurrence count" name="recurrenceCount" type="number">
+                                <TextField
+                                  aria-label="Recurrence count"
+                                  name="recurrenceCount"
+                                  type="number"
+                                >
                                   <InputGroup.Input
                                     className="rounded-xl"
                                     max={12}
@@ -719,17 +743,35 @@ export default function FacilitiesPage() {
                           </TextField>
 
                           <div className="flex flex-col gap-2">
-                            <label className="text-sm font-black text-default-700 ml-1">
+                            <label
+                              className="text-sm font-black text-default-700 ml-1"
+                              htmlFor="facility-image"
+                            >
                               Facility Image
                             </label>
                             <input
                               accept="image/*"
                               aria-label="Facility image upload"
                               className="text-xs text-default-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                              id="facility-image"
                               type="file"
-                              onChange={(e) =>
-                                setSelectedFile(e.target.files?.[0] || null)
-                              }
+                              onChange={(e) => {
+                                const file = e.target.files?.[0] || null;
+
+                                if (file && file.size > 5 * 1024 * 1024) {
+                                  alert("File too large. Maximum size is 5MB.");
+                                  e.target.value = "";
+
+                                  return;
+                                }
+                                if (file && !file.type.startsWith("image/")) {
+                                  alert("Only image files are allowed.");
+                                  e.target.value = "";
+
+                                  return;
+                                }
+                                setSelectedFile(file);
+                              }}
                             />
                           </div>
                         </div>

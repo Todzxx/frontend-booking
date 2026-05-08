@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import api from "@/config/api";
+import { LOCALE } from "@/config/locale";
 
 // ─── Color palette per facility (cycles through if more than 6) ───────────────
 const FACILITY_COLORS = [
@@ -191,7 +192,7 @@ export default function CalendarPage() {
   const groupedByDate: Record<string, any[]> = {};
 
   for (const b of uniqueBookings) {
-    const dateKey = new Date(b.startTime).toLocaleDateString("id-ID", {
+    const dateKey = new Date(b.startTime).toLocaleDateString(LOCALE, {
       weekday: "long",
       year: "numeric",
       month: "long",
@@ -332,7 +333,7 @@ export default function CalendarPage() {
 
         {/* ── Main: timeline ── */}
         <div className="flex-1 min-w-0">
-          <Card className="rounded-[2.5rem] border border-default-200 shadow-xl bg-background/60 backdrop-blur-md overflow-hidden min-h-[480px]">
+          <Card className="rounded-xl border border-default-200 shadow-xl bg-background/60 backdrop-blur-md overflow-hidden min-h-[480px]">
             {/* Card header */}
             <Card.Header
               className={`px-8 py-6 border-b border-default-100 flex flex-col gap-4`}
@@ -421,7 +422,7 @@ export default function CalendarPage() {
               ) : uniqueBookings.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-center px-8">
                   <div
-                    className={`w-20 h-20 ${selectedColor.bg} rounded-[2rem] flex items-center justify-center mb-6 border-2 ${selectedColor.border} ${selectedColor.text}`}
+                    className={`w-20 h-20 ${selectedColor.bg} rounded-xl flex items-center justify-center mb-6 border-2 ${selectedColor.border} ${selectedColor.text}`}
                   >
                     <Clock size={36} />
                   </div>

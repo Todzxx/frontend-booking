@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-import api from "@/config/api";
+import api, { setAccessToken } from "@/config/api";
 
 export interface User {
   id: string;
@@ -13,7 +13,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   token: string | null;
-  login: (token: string, refreshToken: string, userData: User) => void;
+  login: (token: string, _refreshToken: string, userData: User) => void;
   logout: () => Promise<void>;
 }
 
@@ -21,52 +21,52 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token"),
-  );
+  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (token) {
-      api
-        .get("/auth/me")
-        .then((res) => {
-          setUser(res.data.data);
-        })
-        .catch((err) => {
-          if (err.response?.status === 401) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("refreshToken");
-            setToken(null);
-            setUser(null);
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
-    }
-  }, [token]);
+    api
+      .post("/auth/refresh")
+      .then((res) => {
+        if (res.data?.data?.token) {
+          setAccessToken(res.data.data.token);
+          setToken(res.data.data.token);
 
-  const login = (newToken: string, newRefreshToken: string, userData: User) => {
-    localStorage.setItem("token", newToken);
-    localStorage.setItem("refreshToken", newRefreshToken);
+          return api.get("/auth/me");
+        }
+        throw new Error("No token");
+      })
+      .then((res) => {
+        setUser(res.data.data);
+      })
+      .catch(() => {
+        setToken(null);
+        setUser(null);
+        setAccessToken(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  const login = (
+    newToken: string,
+    _newRefreshToken: string,
+    userData: User,
+  ) => {
+    setAccessToken(newToken);
     setToken(newToken);
     setUser(userData);
   };
 
   const logout = async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
-    setToken(null);
-    setUser(null);
-    if (refreshToken) {
-      try {
-        await api.post("/auth/logout", { refreshToken });
-      } catch {
-      }
+    try {
+      await api.post("/auth/logout");
+    } catch {
+    } finally {
+      setAccessToken(null);
+      setToken(null);
+      setUser(null);
     }
   };
 

@@ -29,6 +29,7 @@ import {
 import { Booking, BookingStatus } from "@/types";
 import { formatDateTime } from "@/utils/dateUtils";
 import api from "@/config/api";
+import { LOCALE } from "@/config/locale";
 
 // ── Utility: export bookings as CSV ──────────────────────────────────────────
 function exportToCSV(bookings: Booking[]) {
@@ -49,10 +50,28 @@ function exportToCSV(bookings: Booking[]) {
     `"${b.user?.name ?? ""}"`,
     `"${b.user?.email ?? ""}"`,
     `"${b.facility?.name ?? ""}"`,
-    new Date(b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
-    new Date(b.endTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+    new Date(b.startTime).toLocaleString(LOCALE, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+    new Date(b.endTime).toLocaleString(LOCALE, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
     b.status,
-    new Date(b.createdAt ?? b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+    new Date(b.createdAt ?? b.startTime).toLocaleString(LOCALE, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
   ]);
 
   const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
@@ -76,8 +95,8 @@ function exportToExcel(bookings: Booking[]) {
       <td>${b.user?.name ?? ""}</td>
       <td>${b.user?.email ?? ""}</td>
       <td>${b.facility?.name ?? ""}</td>
-      <td>${new Date(b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
-      <td>${new Date(b.endTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
+      <td>${new Date(b.startTime).toLocaleString(LOCALE, { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
+      <td>${new Date(b.endTime).toLocaleString(LOCALE, { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
       <td>${b.status}</td>
     </tr>
   `,
@@ -113,8 +132,8 @@ function exportToPDF(bookings: Booking[]) {
       <td>${b.purpose ?? ""}</td>
       <td>${b.user?.name ?? ""}</td>
       <td>${b.facility?.name ?? ""}</td>
-      <td>${new Date(b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
-      <td>${new Date(b.endTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
+      <td>${new Date(b.startTime).toLocaleString(LOCALE, { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
+      <td>${new Date(b.endTime).toLocaleString(LOCALE, { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
       <td>${b.status}</td>
     </tr>
   `,
@@ -138,7 +157,7 @@ function exportToPDF(bookings: Booking[]) {
       </head>
       <body>
         <h1>Booking Audit Report</h1>
-        <p>Generated ${new Date().toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
+        <p>Generated ${new Date().toLocaleString(LOCALE, { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
         <table>
           <thead><tr><th>Purpose</th><th>User</th><th>Facility</th><th>Start</th><th>End</th><th>Status</th></tr></thead>
           <tbody>${rows}</tbody>
@@ -353,7 +372,13 @@ export default function AdminDashboard() {
     };
   }, [bookings]);
 
-  const chartColors = ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
+  const chartColors = [
+    "var(--heroui-primary)",
+    "var(--heroui-success)",
+    "var(--heroui-warning)",
+    "var(--heroui-danger)",
+    "var(--heroui-secondary)",
+  ];
 
   // ── Filtered bookings ─────────────────────────────────────────────────────
   const filteredBookings = useMemo(() => {
@@ -472,7 +497,7 @@ export default function AdminDashboard() {
       {!loading && bookings.length > 0 && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Total */}
-          <Card className="p-5 rounded-3xl border border-default-200 bg-background/60">
+          <Card className="p-5 rounded-xl border border-default-200 bg-background/60">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
                 <BarChart2 size={20} />
@@ -488,7 +513,7 @@ export default function AdminDashboard() {
             </div>
           </Card>
           {/* Pending */}
-          <Card className="p-5 rounded-3xl border border-warning/20 bg-warning/5">
+          <Card className="p-5 rounded-xl border border-warning/20 bg-warning/5">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-warning/10 rounded-2xl text-warning">
                 <Clock size={20} />
@@ -504,7 +529,7 @@ export default function AdminDashboard() {
             </div>
           </Card>
           {/* Approved */}
-          <Card className="p-5 rounded-3xl border border-success/20 bg-success/5">
+          <Card className="p-5 rounded-xl border border-success/20 bg-success/5">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-success/10 rounded-2xl text-success">
                 <CheckCircle2 size={20} />
@@ -520,7 +545,7 @@ export default function AdminDashboard() {
             </div>
           </Card>
           {/* Approval Rate */}
-          <Card className="p-5 rounded-3xl border border-primary/20 bg-primary/5">
+          <Card className="p-5 rounded-xl border border-primary/20 bg-primary/5">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
                 <Filter size={20} />
@@ -540,7 +565,7 @@ export default function AdminDashboard() {
 
       {/* Facility usage bar chart */}
       {!loading && stats.facilityStats.length > 0 && (
-        <Card className="p-6 rounded-3xl border border-default-200 bg-background/60">
+        <Card className="p-6 rounded-xl border border-default-200 bg-background/60">
           <div className="flex flex-col sm:flex-row gap-6">
             <div className="flex-1 min-w-0">
               <p className="text-xs font-black text-default-400 uppercase tracking-widest mb-4">
@@ -626,30 +651,47 @@ export default function AdminDashboard() {
             />
           </InputGroup>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <select
-              className="h-11 rounded-2xl border border-default-200 bg-background px-4 text-sm font-bold text-default-600"
-              value={facilityFilter}
-              onChange={(event) => setFacilityFilter(event.target.value)}
-            >
-              <option value="ALL">All rooms</option>
-              {facilityOptions.map((name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ))}
-            </select>
-            <input
-              className="h-11 rounded-2xl border border-default-200 bg-background px-4 text-sm font-bold text-default-600"
-              type="date"
-              value={dateFilter}
-              onChange={(event) => setDateFilter(event.target.value)}
-            />
+            <label className="flex flex-col gap-1">
+              <span className="text-[10px] font-black text-default-400 uppercase tracking-widest sr-only">
+                Room
+              </span>
+              <select
+                aria-label="Filter by room"
+                className="h-11 rounded-xl border border-default-200 bg-background px-4 text-sm font-bold text-default-600"
+                value={facilityFilter}
+                onChange={(event) => setFacilityFilter(event.target.value)}
+              >
+                <option value="ALL">All rooms</option>
+                {facilityOptions.map((name) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1">
+              <span className="text-[10px] font-black text-default-400 uppercase tracking-widest sr-only">
+                Date
+              </span>
+              <input
+                aria-label="Filter by date"
+                className="h-11 rounded-xl border border-default-200 bg-background px-4 text-sm font-bold text-default-600"
+                type="date"
+                value={dateFilter}
+                onChange={(event) => setDateFilter(event.target.value)}
+              />
+            </label>
           </div>
-          <div className="flex gap-2 flex-wrap">
+          <div
+            aria-label="Filter by status"
+            className="flex gap-2 flex-wrap"
+            role="tablist"
+          >
             {STATUS_FILTERS.map((s) => (
               <button
                 key={s}
-                className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider border-2 transition-all duration-200 ${
+                aria-selected={statusFilter === s}
+                className={`px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wider border-2 transition-all duration-200 ${
                   statusFilter === s
                     ? s === "ALL"
                       ? "bg-primary text-white border-primary"
@@ -660,6 +702,7 @@ export default function AdminDashboard() {
                           : "bg-danger text-white border-danger"
                     : "bg-background border-default-200 text-default-500 hover:border-default-400"
                 }`}
+                role="tab"
                 onClick={() => setStatusFilter(s)}
               >
                 {s}
@@ -680,12 +723,12 @@ export default function AdminDashboard() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-40 bg-default-100 rounded-3xl animate-pulse"
+              className="h-40 bg-default-100 rounded-xl animate-pulse"
             />
           ))}
         </div>
       ) : filteredBookings.length === 0 ? (
-        <Card className="p-20 text-center bg-default-50/50 border-2 border-dashed border-default-200 rounded-3xl">
+        <Card className="p-8 text-center bg-default-50/50 border-2 border-dashed border-default-200 rounded-xl">
           <AlertCircle className="mx-auto text-default-300 mb-4" size={48} />
           <p className="text-xl font-black text-default-400">
             {search ||
@@ -720,7 +763,7 @@ export default function AdminDashboard() {
           {filteredBookings.map((booking: any) => (
             <Card
               key={booking.id}
-              className="p-6 border border-default-200 rounded-3xl bg-background/60 backdrop-blur-md hover:shadow-lg transition-shadow duration-300"
+              className="p-6 border border-default-200 rounded-xl bg-background/60 backdrop-blur-md hover:shadow-lg transition-shadow duration-300"
             >
               <div className="flex flex-col lg:flex-row justify-between gap-6">
                 <div className="flex-1 flex flex-col gap-3 min-w-0">
@@ -780,7 +823,7 @@ export default function AdminDashboard() {
                         <p className="text-[10px] text-default-400">
                           →{" "}
                           {new Date(booking.endTime).toLocaleTimeString(
-                            "id-ID",
+                            LOCALE,
                             { hour: "2-digit", minute: "2-digit" },
                           )}
                         </p>
@@ -835,12 +878,12 @@ export default function AdminDashboard() {
         </Modal.Trigger>
         <Modal.Backdrop variant="blur">
           <Modal.Container scroll="inside">
-            <Modal.Dialog className="max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden rounded-[2.5rem] border border-default-200 bg-surface/90 backdrop-blur-xl p-2">
+            <Modal.Dialog className="max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden rounded-2xl border border-default-200 bg-surface/90 backdrop-blur-xl p-2">
               {({ close }) => (
                 <div className="p-6 flex flex-col flex-1 min-h-0 overflow-y-auto">
                   <Modal.Header className="flex flex-col gap-1 items-center text-center px-4 pt-4">
                     <div
-                      className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-4 ${
+                      className={`w-16 h-16 rounded-xl flex items-center justify-center mb-4 ${
                         pendingAction?.status === "APPROVED"
                           ? "bg-success/10 text-success"
                           : "bg-danger/10 text-danger"
@@ -856,7 +899,7 @@ export default function AdminDashboard() {
                       {pendingAction?.status?.toLowerCase()} action.
                     </p>
                   </Modal.Header>
-                   <Modal.Body className="py-8">
+                  <Modal.Body className="py-8">
                     <div className="flex flex-col gap-4">
                       {modalError && (
                         <div className="bg-danger/10 text-danger text-sm p-4 rounded-2xl border border-danger/20 font-bold">

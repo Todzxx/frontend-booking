@@ -1,8 +1,19 @@
 import axios from "axios";
 
-// Create an Axios instance
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
+
+let accessToken: string | null = null;
+
+export function setAccessToken(token: string | null) {
+  accessToken = token;
+}
+
+export function getAccessToken(): string | null {
+  return accessToken;
+}
+
 const api = axios.create({
-  baseURL: "http://localhost:5000/api/v1",
+  baseURL: API_URL,
   withCredentials: true,
   timeout: 15000,
   headers: {
@@ -10,60 +21,40 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to attach token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
-// Response interceptor to handle token refresh (optional but recommended if using refresh token)
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   async (error) => {
-    // Return early if the error is from the refresh token endpoint to avoid infinite loops
     if (
       error.response?.status === 401 &&
       error.config.url !== "/auth/refresh"
     ) {
-      const refreshToken = localStorage.getItem("refreshToken");
+      try {
+        const { data } = await axios.post(
+          `${API_URL}/auth/refresh`,
+          {},
+          { withCredentials: true },
+        );
 
-      if (refreshToken) {
-        try {
-          // Attempt to refresh the token
-          const { data } = await axios.post(
-            "http://localhost:5000/api/v1/auth/refresh",
-            {
-              refreshToken,
-            },
-          );
+        if (data && data.data && data.data.token) {
+          setAccessToken(data.data.token);
+          error.config.headers.Authorization = `Bearer ${data.data.token}`;
 
-          // If successful, save new token
-          if (data && data.data && data.data.token) {
-            localStorage.setItem("token", data.data.token);
-
-            // Retry the original request
-            error.config.headers.Authorization = `Bearer ${data.data.token}`;
-
-            return axios(error.config);
-          }
-        } catch {
-          // If refresh fails, clear tokens and redirect to login
-          localStorage.removeItem("token");
-          localStorage.removeItem("refreshToken");
-          window.location.href = "/login";
+          return axios(error.config);
         }
+      } catch {
+        setAccessToken(null);
+        window.location.href = "/login";
       }
     }
 

@@ -44,7 +44,7 @@ export default function HelpPage() {
         {guideItems.map((item) => (
           <Card
             key={item.title}
-            className="p-6 rounded-3xl border border-default-200 bg-background/60 backdrop-blur-md"
+            className="p-6 rounded-xl border border-default-200 bg-background/60 backdrop-blur-md"
           >
             <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-5">
               <item.icon size={24} />
@@ -59,7 +59,7 @@ export default function HelpPage() {
         ))}
       </div>
 
-      <Card className="p-8 rounded-[2rem] border border-default-200 bg-default-50/50">
+      <Card className="p-8 rounded-xl border border-default-200 bg-default-50/50">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
             <div className="w-14 h-14 rounded-2xl bg-default-100 text-primary flex items-center justify-center shrink-0">
@@ -77,7 +77,7 @@ export default function HelpPage() {
           </div>
           <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-background border border-default-200 text-sm font-bold text-default-600">
             <Mail className="text-primary" size={18} />
-            admin@roomsync.com
+            Contact your system administrator
           </div>
         </div>
       </Card>

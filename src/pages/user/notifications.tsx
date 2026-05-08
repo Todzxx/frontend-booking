@@ -3,6 +3,7 @@ import { Card, Chip } from "@heroui/react";
 import { Bell, CheckCircle2, Clock, XCircle } from "lucide-react";
 
 import api from "@/config/api";
+import { LOCALE } from "@/config/locale";
 
 function getStatusIcon(status: string) {
   switch (status) {
@@ -95,13 +96,13 @@ export default function NotificationsPage() {
           {[1, 2, 3].map((item) => (
             <div
               key={item}
-              className="h-28 rounded-3xl bg-default-100 animate-pulse"
+              className="h-28 rounded-xl bg-default-100 animate-pulse"
             />
           ))}
         </div>
       ) : notifications.length === 0 ? (
         <Card className="p-16 flex flex-col items-center justify-center text-center bg-default-50/30 border-dashed border-2 border-default-200 rounded-[2.5rem]">
-          <div className="w-20 h-20 bg-default-100 rounded-3xl flex items-center justify-center mb-6">
+          <div className="w-20 h-20 bg-default-100 rounded-xl flex items-center justify-center mb-6">
             <Bell className="text-default-300" size={40} />
           </div>
           <p className="text-default-400 text-xl font-black">
@@ -116,7 +117,7 @@ export default function NotificationsPage() {
           {notifications.map((booking) => (
             <Card
               key={booking.id}
-              className="p-6 rounded-3xl border border-default-200 bg-background/60 backdrop-blur-md"
+              className="p-6 rounded-xl border border-default-200 bg-background/60 backdrop-blur-md"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-start gap-4">
@@ -130,7 +131,7 @@ export default function NotificationsPage() {
                     <p className="text-sm text-default-500 font-medium">
                       {new Date(
                         booking.updatedAt || booking.createdAt,
-                      ).toLocaleString("id-ID")}
+                      ).toLocaleString(LOCALE)}
                     </p>
                   </div>
                 </div>
