@@ -77,7 +77,7 @@ export default function HelpPage() {
           </div>
           <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-background border border-default-200 text-sm font-bold text-default-600">
             <Mail className="text-primary" size={18} />
-            admin@roomsync.com
+            Contact your system administrator
           </div>
         </div>
       </Card>

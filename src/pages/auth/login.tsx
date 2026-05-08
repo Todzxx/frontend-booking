@@ -37,10 +37,8 @@ export default function LoginPage() {
         );
         navigate(response.data.data.user?.role === "ADMIN" ? "/admin" : "/");
       }
-    } catch (err: any) {
-      setError(
-        err.response?.data?.message || "Login failed. Please try again.",
-      );
+    } catch {
+      setError("Login failed. Please check your credentials and try again.");
     } finally {
       setLoading(false);
     }

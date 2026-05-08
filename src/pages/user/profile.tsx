@@ -77,8 +77,8 @@ export default function ProfilePage() {
       setSuccess("Profile updated successfully!");
       setPassword("");
       setConfirmPassword("");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to update profile");
+    } catch {
+      setError("Failed to update profile. Please try again.");
     } finally {
       setUpdating(false);
     }

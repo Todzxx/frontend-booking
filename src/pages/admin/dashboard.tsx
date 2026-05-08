@@ -49,10 +49,28 @@ function exportToCSV(bookings: Booking[]) {
     `"${b.user?.name ?? ""}"`,
     `"${b.user?.email ?? ""}"`,
     `"${b.facility?.name ?? ""}"`,
-    new Date(b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
-    new Date(b.endTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+    new Date(b.startTime).toLocaleString("id-ID", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+    new Date(b.endTime).toLocaleString("id-ID", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
     b.status,
-    new Date(b.createdAt ?? b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+    new Date(b.createdAt ?? b.startTime).toLocaleString("id-ID", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
   ]);
 
   const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
@@ -856,7 +874,7 @@ export default function AdminDashboard() {
                       {pendingAction?.status?.toLowerCase()} action.
                     </p>
                   </Modal.Header>
-                   <Modal.Body className="py-8">
+                  <Modal.Body className="py-8">
                     <div className="flex flex-col gap-4">
                       {modalError && (
                         <div className="bg-danger/10 text-danger text-sm p-4 rounded-2xl border border-danger/20 font-bold">

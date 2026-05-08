@@ -345,7 +345,10 @@ export default function FacilitiesPage() {
             </Button>
           )}
           <div className="relative w-full md:w-80">
-            <InputGroup aria-label="Search facilities" className="rounded-2xl border-default-200">
+            <InputGroup
+              aria-label="Search facilities"
+              className="rounded-2xl border-default-200"
+            >
               <InputGroup.Prefix className="pl-3">
                 <Search className="text-default-400" size={18} />
               </InputGroup.Prefix>
@@ -533,7 +536,11 @@ export default function FacilitiesPage() {
                           <Clock className="text-primary shrink-0" size={18} />
                         </div>
 
-                        <TextField aria-label="Booking date" name="bookingDate" type="date">
+                        <TextField
+                          aria-label="Booking date"
+                          name="bookingDate"
+                          type="date"
+                        >
                           <InputGroup.Input
                             className="rounded-2xl"
                             value={bookingDate}
@@ -613,7 +620,11 @@ export default function FacilitiesPage() {
                             : "Event Purpose"}
                         </label>
                         <TextArea
-                          aria-label={isEditMode || isCreateMode ? "Room description" : "Event purpose"}
+                          aria-label={
+                            isEditMode || isCreateMode
+                              ? "Room description"
+                              : "Event purpose"
+                          }
                           className="rounded-2xl w-full text-left"
                           placeholder={
                             isEditMode || isCreateMode
@@ -661,13 +672,22 @@ export default function FacilitiesPage() {
                                   </Select.Trigger>
                                   <Select.Popover>
                                     <ListBox>
-                                      <ListBox.Item id="DAILY" textValue="Daily">
+                                      <ListBox.Item
+                                        id="DAILY"
+                                        textValue="Daily"
+                                      >
                                         Daily
                                       </ListBox.Item>
-                                      <ListBox.Item id="WEEKLY" textValue="Weekly">
+                                      <ListBox.Item
+                                        id="WEEKLY"
+                                        textValue="Weekly"
+                                      >
                                         Weekly
                                       </ListBox.Item>
-                                      <ListBox.Item id="MONTHLY" textValue="Monthly">
+                                      <ListBox.Item
+                                        id="MONTHLY"
+                                        textValue="Monthly"
+                                      >
                                         Monthly
                                       </ListBox.Item>
                                     </ListBox>
@@ -678,7 +698,11 @@ export default function FacilitiesPage() {
                                 <Label className="text-[10px] font-black uppercase text-default-400 ml-1">
                                   Count (Max 12)
                                 </Label>
-                                <TextField aria-label="Recurrence count" name="recurrenceCount" type="number">
+                                <TextField
+                                  aria-label="Recurrence count"
+                                  name="recurrenceCount"
+                                  type="number"
+                                >
                                   <InputGroup.Input
                                     className="rounded-xl"
                                     max={12}
@@ -727,9 +751,23 @@ export default function FacilitiesPage() {
                               aria-label="Facility image upload"
                               className="text-xs text-default-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
                               type="file"
-                              onChange={(e) =>
-                                setSelectedFile(e.target.files?.[0] || null)
-                              }
+                              onChange={(e) => {
+                                const file = e.target.files?.[0] || null;
+
+                                if (file && file.size > 5 * 1024 * 1024) {
+                                  alert("File too large. Maximum size is 5MB.");
+                                  e.target.value = "";
+
+                                  return;
+                                }
+                                if (file && !file.type.startsWith("image/")) {
+                                  alert("Only image files are allowed.");
+                                  e.target.value = "";
+
+                                  return;
+                                }
+                                setSelectedFile(file);
+                              }}
                             />
                           </div>
                         </div>
