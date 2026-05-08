@@ -3,6 +3,7 @@ import { Card, Chip } from "@heroui/react";
 import { Bell, CheckCircle2, Clock, XCircle } from "lucide-react";
 
 import api from "@/config/api";
+import { LOCALE } from "@/config/locale";
 
 function getStatusIcon(status: string) {
   switch (status) {
@@ -130,7 +131,7 @@ export default function NotificationsPage() {
                     <p className="text-sm text-default-500 font-medium">
                       {new Date(
                         booking.updatedAt || booking.createdAt,
-                      ).toLocaleString("id-ID")}
+                      ).toLocaleString(LOCALE)}
                     </p>
                   </div>
                 </div>

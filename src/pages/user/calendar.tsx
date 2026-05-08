@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import api from "@/config/api";
+import { LOCALE } from "@/config/locale";
 
 // ─── Color palette per facility (cycles through if more than 6) ───────────────
 const FACILITY_COLORS = [
@@ -191,7 +192,7 @@ export default function CalendarPage() {
   const groupedByDate: Record<string, any[]> = {};
 
   for (const b of uniqueBookings) {
-    const dateKey = new Date(b.startTime).toLocaleDateString("id-ID", {
+    const dateKey = new Date(b.startTime).toLocaleDateString(LOCALE, {
       weekday: "long",
       year: "numeric",
       month: "long",

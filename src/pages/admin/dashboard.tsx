@@ -29,6 +29,7 @@ import {
 import { Booking, BookingStatus } from "@/types";
 import { formatDateTime } from "@/utils/dateUtils";
 import api from "@/config/api";
+import { LOCALE } from "@/config/locale";
 
 // ── Utility: export bookings as CSV ──────────────────────────────────────────
 function exportToCSV(bookings: Booking[]) {
@@ -49,14 +50,14 @@ function exportToCSV(bookings: Booking[]) {
     `"${b.user?.name ?? ""}"`,
     `"${b.user?.email ?? ""}"`,
     `"${b.facility?.name ?? ""}"`,
-    new Date(b.startTime).toLocaleString("id-ID", {
+    new Date(b.startTime).toLocaleString(LOCALE, {
       year: "numeric",
       month: "numeric",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
     }),
-    new Date(b.endTime).toLocaleString("id-ID", {
+    new Date(b.endTime).toLocaleString(LOCALE, {
       year: "numeric",
       month: "numeric",
       day: "numeric",
@@ -64,7 +65,7 @@ function exportToCSV(bookings: Booking[]) {
       minute: "2-digit",
     }),
     b.status,
-    new Date(b.createdAt ?? b.startTime).toLocaleString("id-ID", {
+    new Date(b.createdAt ?? b.startTime).toLocaleString(LOCALE, {
       year: "numeric",
       month: "numeric",
       day: "numeric",
@@ -94,8 +95,8 @@ function exportToExcel(bookings: Booking[]) {
       <td>${b.user?.name ?? ""}</td>
       <td>${b.user?.email ?? ""}</td>
       <td>${b.facility?.name ?? ""}</td>
-      <td>${new Date(b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
-      <td>${new Date(b.endTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
+      <td>${new Date(b.startTime).toLocaleString(LOCALE, { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
+      <td>${new Date(b.endTime).toLocaleString(LOCALE, { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
       <td>${b.status}</td>
     </tr>
   `,
@@ -131,8 +132,8 @@ function exportToPDF(bookings: Booking[]) {
       <td>${b.purpose ?? ""}</td>
       <td>${b.user?.name ?? ""}</td>
       <td>${b.facility?.name ?? ""}</td>
-      <td>${new Date(b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
-      <td>${new Date(b.endTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
+      <td>${new Date(b.startTime).toLocaleString(LOCALE, { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
+      <td>${new Date(b.endTime).toLocaleString(LOCALE, { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
       <td>${b.status}</td>
     </tr>
   `,
@@ -156,7 +157,7 @@ function exportToPDF(bookings: Booking[]) {
       </head>
       <body>
         <h1>Booking Audit Report</h1>
-        <p>Generated ${new Date().toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
+        <p>Generated ${new Date().toLocaleString(LOCALE, { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
         <table>
           <thead><tr><th>Purpose</th><th>User</th><th>Facility</th><th>Start</th><th>End</th><th>Status</th></tr></thead>
           <tbody>${rows}</tbody>
@@ -822,7 +823,7 @@ export default function AdminDashboard() {
                         <p className="text-[10px] text-default-400">
                           →{" "}
                           {new Date(booking.endTime).toLocaleTimeString(
-                            "id-ID",
+                            LOCALE,
                             { hour: "2-digit", minute: "2-digit" },
                           )}
                         </p>
