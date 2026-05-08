@@ -520,7 +520,7 @@ export default function CalendarPage() {
                                     size="sm"
                                     variant="soft"
                                   >
-                                    🔴 LIVE
+                                    LIVE
                                   </Chip>
                                 )}
                               </div>

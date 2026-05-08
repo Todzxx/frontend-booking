@@ -5,8 +5,8 @@ import {
   Button,
   Modal,
   TextArea,
-  Label,
   InputGroup,
+  useOverlayState,
 } from "@heroui/react";
 import {
   CheckCircle2,
@@ -49,10 +49,10 @@ function exportToCSV(bookings: Booking[]) {
     `"${b.user?.name ?? ""}"`,
     `"${b.user?.email ?? ""}"`,
     `"${b.facility?.name ?? ""}"`,
-    new Date(b.startTime).toLocaleString("id-ID"),
-    new Date(b.endTime).toLocaleString("id-ID"),
+    new Date(b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+    new Date(b.endTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
     b.status,
-    new Date(b.createdAt ?? b.startTime).toLocaleString("id-ID"),
+    new Date(b.createdAt ?? b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
   ]);
 
   const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
@@ -76,8 +76,8 @@ function exportToExcel(bookings: Booking[]) {
       <td>${b.user?.name ?? ""}</td>
       <td>${b.user?.email ?? ""}</td>
       <td>${b.facility?.name ?? ""}</td>
-      <td>${new Date(b.startTime).toLocaleString("id-ID")}</td>
-      <td>${new Date(b.endTime).toLocaleString("id-ID")}</td>
+      <td>${new Date(b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
+      <td>${new Date(b.endTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
       <td>${b.status}</td>
     </tr>
   `,
@@ -113,8 +113,8 @@ function exportToPDF(bookings: Booking[]) {
       <td>${b.purpose ?? ""}</td>
       <td>${b.user?.name ?? ""}</td>
       <td>${b.facility?.name ?? ""}</td>
-      <td>${new Date(b.startTime).toLocaleString("id-ID")}</td>
-      <td>${new Date(b.endTime).toLocaleString("id-ID")}</td>
+      <td>${new Date(b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
+      <td>${new Date(b.endTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
       <td>${b.status}</td>
     </tr>
   `,
@@ -138,7 +138,7 @@ function exportToPDF(bookings: Booking[]) {
       </head>
       <body>
         <h1>Booking Audit Report</h1>
-        <p>Generated ${new Date().toLocaleString("id-ID")}</p>
+        <p>Generated ${new Date().toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
         <table>
           <thead><tr><th>Purpose</th><th>User</th><th>Facility</th><th>Start</th><th>End</th><th>Status</th></tr></thead>
           <tbody>${rows}</tbody>
@@ -222,8 +222,9 @@ export default function AdminDashboard() {
   >([]);
 
   // Note Modal
-  const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
+  const noteModalState = useOverlayState();
   const [notes, setNotes] = useState("");
+  const [modalError, setModalError] = useState("");
   const [pendingAction, setPendingAction] = useState<{
     id: string;
     status: BookingStatus;
@@ -264,10 +265,7 @@ export default function AdminDashboard() {
     adminNote?: string,
   ) => {
     if (status === "REJECTED" && adminNote !== undefined && !adminNote.trim()) {
-      pushAdminNotification(
-        "validation",
-        "Admin note is required when rejecting a booking.",
-      );
+      setModalError("Admin note is required when rejecting a booking.");
 
       return;
     }
@@ -275,7 +273,8 @@ export default function AdminDashboard() {
     if (adminNote === undefined) {
       setPendingAction({ id, status });
       setNotes("");
-      setIsNoteModalOpen(true);
+      setModalError("");
+      noteModalState.open();
 
       return;
     }
@@ -284,7 +283,7 @@ export default function AdminDashboard() {
     try {
       await api.patch(`/bookings/${id}/status`, { status, notes: adminNote });
       await fetchAllBookings();
-      setIsNoteModalOpen(false);
+      noteModalState.close();
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("Error updating status", err);
@@ -830,12 +829,11 @@ export default function AdminDashboard() {
       )}
 
       {/* Admin Note Modal */}
-      <Modal>
-        <Modal.Backdrop
-          isOpen={isNoteModalOpen}
-          variant="blur"
-          onOpenChange={setIsNoteModalOpen}
-        >
+      <Modal state={noteModalState}>
+        <Modal.Trigger>
+          <button aria-hidden className="sr-only" tabIndex={-1} />
+        </Modal.Trigger>
+        <Modal.Backdrop variant="blur">
           <Modal.Container scroll="inside">
             <Modal.Dialog className="max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden rounded-[2.5rem] border border-default-200 bg-surface/90 backdrop-blur-xl p-2">
               {({ close }) => (
@@ -858,19 +856,30 @@ export default function AdminDashboard() {
                       {pendingAction?.status?.toLowerCase()} action.
                     </p>
                   </Modal.Header>
-                  <Modal.Body className="py-8">
-                    <div className="flex flex-col gap-2">
-                      <Label className="text-sm font-black text-default-700 ml-1">
-                        {pendingAction?.status === "REJECTED"
-                          ? "Admin Note (Required)"
-                          : "Admin Note (Optional)"}
-                      </Label>
-                      <TextArea
-                        className="rounded-2xl"
-                        placeholder="Write your message here..."
-                        value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
-                      />
+                   <Modal.Body className="py-8">
+                    <div className="flex flex-col gap-4">
+                      {modalError && (
+                        <div className="bg-danger/10 text-danger text-sm p-4 rounded-2xl border border-danger/20 font-bold">
+                          {modalError}
+                        </div>
+                      )}
+                      <div className="flex flex-col gap-2">
+                        <label className="text-sm font-black text-default-700 ml-1">
+                          {pendingAction?.status === "REJECTED"
+                            ? "Admin Note (Required)"
+                            : "Admin Note (Optional)"}
+                        </label>
+                        <TextArea
+                          aria-label="Admin note"
+                          className="rounded-2xl"
+                          placeholder="Write your message here..."
+                          value={notes}
+                          onChange={(e) => {
+                            setNotes(e.target.value);
+                            setModalError("");
+                          }}
+                        />
+                      </div>
                     </div>
                   </Modal.Body>
                   <Modal.Footer className="px-0 pb-2 gap-3 flex flex-col sm:flex-row">

@@ -12,6 +12,7 @@ import {
   Select,
   ListBox,
   TextArea,
+  useOverlayState,
 } from "@heroui/react";
 import {
   Search,
@@ -100,6 +101,7 @@ export default function FacilitiesPage() {
 
   // Use simple React state for Modal
   const [isOpen, setIsOpen] = useState(false);
+  const modalState = useOverlayState({ isOpen, onOpenChange: setIsOpen });
   const [selectedFacility, setSelectedFacility] = useState<any>(null);
 
   // Booking form state
@@ -343,7 +345,7 @@ export default function FacilitiesPage() {
             </Button>
           )}
           <div className="relative w-full md:w-80">
-            <InputGroup className="rounded-2xl border-default-200">
+            <InputGroup aria-label="Search facilities" className="rounded-2xl border-default-200">
               <InputGroup.Prefix className="pl-3">
                 <Search className="text-default-400" size={18} />
               </InputGroup.Prefix>
@@ -475,8 +477,11 @@ export default function FacilitiesPage() {
         </div>
       )}
 
-      <Modal>
-        <Modal.Backdrop isOpen={isOpen} variant="blur" onOpenChange={setIsOpen}>
+      <Modal state={modalState}>
+        <Modal.Trigger>
+          <button aria-hidden className="sr-only" tabIndex={-1} />
+        </Modal.Trigger>
+        <Modal.Backdrop variant="blur">
           <Modal.Container scroll="inside">
             <Modal.Dialog className="max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden rounded-[2.5rem] border border-default-200 bg-surface/90 backdrop-blur-xl p-2">
               {({ close }) => (
@@ -518,9 +523,9 @@ export default function FacilitiesPage() {
                       <div className="space-y-3 rounded-3xl border border-default-200 bg-default-50/70 p-4">
                         <div className="flex items-center justify-between gap-3">
                           <div>
-                            <Label className="text-sm font-black text-default-700">
+                            <label className="text-sm font-black text-default-700">
                               Slot Availability
-                            </Label>
+                            </label>
                             <p className="text-[11px] font-bold text-default-400">
                               Booked times for the selected date.
                             </p>
@@ -528,7 +533,7 @@ export default function FacilitiesPage() {
                           <Clock className="text-primary shrink-0" size={18} />
                         </div>
 
-                        <TextField name="bookingDate" type="date">
+                        <TextField aria-label="Booking date" name="bookingDate" type="date">
                           <InputGroup.Input
                             className="rounded-2xl"
                             value={bookingDate}
@@ -602,13 +607,14 @@ export default function FacilitiesPage() {
                       )}
 
                       <div className="space-y-4">
-                        <Label className="text-sm font-black text-default-700 ml-1">
+                        <label className="text-sm font-black text-default-700 ml-1">
                           {isEditMode || isCreateMode
                             ? "Description"
                             : "Event Purpose"}
-                        </Label>
+                        </label>
                         <TextArea
-                          className="rounded-2xl"
+                          aria-label={isEditMode || isCreateMode ? "Room description" : "Event purpose"}
+                          className="rounded-2xl w-full text-left"
                           placeholder={
                             isEditMode || isCreateMode
                               ? "Room description..."
@@ -642,6 +648,7 @@ export default function FacilitiesPage() {
                                   Type
                                 </Label>
                                 <Select
+                                  aria-label="Recurrence type"
                                   className="rounded-xl"
                                   placeholder="Select type"
                                   value={recurrenceType}
@@ -654,13 +661,13 @@ export default function FacilitiesPage() {
                                   </Select.Trigger>
                                   <Select.Popover>
                                     <ListBox>
-                                      <ListBox.Item id="DAILY">
+                                      <ListBox.Item id="DAILY" textValue="Daily">
                                         Daily
                                       </ListBox.Item>
-                                      <ListBox.Item id="WEEKLY">
+                                      <ListBox.Item id="WEEKLY" textValue="Weekly">
                                         Weekly
                                       </ListBox.Item>
-                                      <ListBox.Item id="MONTHLY">
+                                      <ListBox.Item id="MONTHLY" textValue="Monthly">
                                         Monthly
                                       </ListBox.Item>
                                     </ListBox>
@@ -671,7 +678,7 @@ export default function FacilitiesPage() {
                                 <Label className="text-[10px] font-black uppercase text-default-400 ml-1">
                                   Count (Max 12)
                                 </Label>
-                                <TextField name="recurrenceCount" type="number">
+                                <TextField aria-label="Recurrence count" name="recurrenceCount" type="number">
                                   <InputGroup.Input
                                     className="rounded-xl"
                                     max={12}
@@ -712,11 +719,12 @@ export default function FacilitiesPage() {
                           </TextField>
 
                           <div className="flex flex-col gap-2">
-                            <Label className="text-sm font-black text-default-700 ml-1">
+                            <label className="text-sm font-black text-default-700 ml-1">
                               Facility Image
-                            </Label>
+                            </label>
                             <input
                               accept="image/*"
+                              aria-label="Facility image upload"
                               className="text-xs text-default-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
                               type="file"
                               onChange={(e) =>

@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-import api from "@/config/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ProtectedRouteProps {
   adminOnly?: boolean;
@@ -12,28 +11,7 @@ export default function ProtectedRoute({
   adminOnly = false,
   userOnly = false,
 }: ProtectedRouteProps) {
-  const token = localStorage.getItem("token");
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    if (token) {
-      api
-        .get("/auth/me")
-        .then((res) => {
-          setUser(res.data.data);
-        })
-        .catch(() => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("refreshToken");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
-    }
-  }, [token]);
+  const { user, token, loading } = useAuth();
 
   if (loading) {
     return (
