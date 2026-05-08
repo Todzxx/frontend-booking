@@ -70,7 +70,7 @@ export default function BookingsPage() {
       )}
 
       {bookings.length === 0 ? (
-        <Card className="p-12 rounded-[2rem] border border-default-200 text-center">
+        <Card className="p-12 rounded-xl border border-default-200 text-center">
           <p className="text-xl font-black text-foreground">No bookings yet</p>
           <p className="text-muted font-medium mt-2">
             Book a facility to get started.

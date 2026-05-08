@@ -65,7 +65,7 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col gap-10 max-w-6xl mx-auto py-8 px-4">
       {/* Header Section with Glassmorphism */}
-      <div className="relative overflow-hidden rounded-[3rem] bg-primary p-8 md:p-12 text-primary-foreground shadow-2xl shadow-primary/30">
+      <div className="relative overflow-hidden rounded-xl bg-primary p-6 md:p-8 text-primary-foreground shadow-2xl shadow-primary/30">
         <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none rotate-12">
           <Sparkles size={240} />
         </div>
@@ -158,9 +158,9 @@ export default function DashboardPage() {
             </h3>
           </div>
 
-          <Card className="p-8 border border-default-200 bg-background/60 backdrop-blur-md rounded-[2.5rem]">
+          <Card className="p-6 border border-default-200 bg-background/60 backdrop-blur-md rounded-xl">
             <div className="flex flex-col items-center justify-center py-10 text-center">
-              <div className="w-20 h-20 bg-default-100 rounded-3xl flex items-center justify-center mb-6 text-default-300">
+              <div className="w-20 h-20 bg-default-100 rounded-xl flex items-center justify-center mb-6 text-default-300">
                 <Clock size={40} />
               </div>
               <p className="text-xl font-black text-foreground">
@@ -189,7 +189,7 @@ export default function DashboardPage() {
 
           <div className="flex flex-col gap-4">
             <button
-              className="group p-6 rounded-[2rem] bg-secondary/5 border border-secondary/10 hover:border-secondary/30 transition-all text-left flex items-center justify-between"
+              className="group p-6 rounded-xl bg-secondary/5 border border-secondary/10 hover:border-secondary/30 transition-all text-left flex items-center justify-between"
               onClick={() => navigate("/profile")}
             >
               <div className="flex items-center gap-4">
@@ -212,7 +212,7 @@ export default function DashboardPage() {
             </button>
 
             <button
-              className="group p-6 rounded-[2rem] bg-primary/5 border border-primary/10 hover:border-primary/30 transition-all text-left flex items-center justify-between"
+              className="group p-6 rounded-xl bg-primary/5 border border-primary/10 hover:border-primary/30 transition-all text-left flex items-center justify-between"
               onClick={() => navigate("/calendar")}
             >
               <div className="flex items-center gap-4">
@@ -235,7 +235,7 @@ export default function DashboardPage() {
             </button>
           </div>
 
-          <Card className="p-8 bg-default-50 border border-default-200 rounded-[2.5rem]">
+          <Card className="p-6 bg-default-50 border border-default-200 rounded-xl">
             <div className="flex flex-col gap-4">
               <p className="text-xs font-black text-default-400 uppercase tracking-[0.2em]">
                 Need Help?

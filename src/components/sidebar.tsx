@@ -54,7 +54,7 @@ export const Sidebar = () => {
     <aside className="hidden lg:flex flex-col w-72 h-screen sticky top-0 border-r border-default-200 bg-default-50/80 backdrop-blur-xl p-6 overflow-hidden">
       {/* Logo */}
       <div className="flex items-center gap-3 px-2 mb-12">
-        <div className="p-2.5 bg-accent text-accent-foreground rounded-2xl shadow-lg shadow-accent/30 flex items-center justify-center">
+        <div className="p-2.5 bg-accent text-accent-foreground rounded-xl shadow-lg shadow-accent/30 flex items-center justify-center">
           <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24">
             <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" />
           </svg>
@@ -66,16 +66,16 @@ export const Sidebar = () => {
 
       {/* Menu — scrollable so it never pushes logout off-screen */}
       <div className="flex-1 flex flex-col gap-2 overflow-y-auto min-h-0 pr-1">
-        <p className="text-[10px] font-black text-default-400 uppercase tracking-[0.2em] px-4 mb-2">
+        <h2 className="text-[10px] font-black text-default-400 uppercase tracking-[0.2em] px-4 mb-2">
           Main Menu
-        </p>
+        </h2>
         {menuItems.map((item) => {
           const Active = isActive(item.path);
 
           return (
             <Link
               key={item.path}
-              className={`group flex items-center justify-between px-4 py-4 rounded-2xl transition-all duration-300 ${
+              className={`group flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-300 ${
                 Active
                   ? "bg-primary/10 text-primary shadow-sm scale-[1.02]"
                   : "text-default-500 hover:bg-default-100 hover:text-foreground"
@@ -105,14 +105,14 @@ export const Sidebar = () => {
 
       {/* User Info & Settings — always pinned to the bottom */}
       <div className="mt-4 flex flex-col gap-4 shrink-0">
-        <div className="p-2 bg-default-50 rounded-2xl border border-default-100 flex items-center justify-between">
+        <div className="p-2 bg-default-50 rounded-xl border border-default-100 flex items-center justify-between">
           <span className="text-xs font-black text-default-400 px-2 uppercase tracking-widest">
             Theme
           </span>
           <ThemeSwitcher />
         </div>
 
-        <div className="flex flex-col gap-4 p-4 bg-background/60 dark:bg-default-50/50 border border-default-200 rounded-[2rem] shadow-inner">
+        <div className="flex flex-col gap-4 p-4 bg-background/60 dark:bg-default-50/50 border border-default-200 rounded-xl shadow-inner">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black">
               {user?.name?.[0] || "U"}

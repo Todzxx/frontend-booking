@@ -48,7 +48,7 @@ export default function LoginPage() {
     <div className="flex min-h-[calc(100vh-14rem)] flex-col items-center justify-start py-4 sm:justify-center sm:py-8">
       <div className="w-full max-w-md space-y-5 sm:space-y-7">
         <div className="relative z-10 flex flex-col items-center gap-3">
-          <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-accent text-accent-foreground shadow-2xl shadow-accent/30 sm:h-18 sm:w-18">
+          <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-accent text-accent-foreground shadow-2xl shadow-accent/30 sm:h-18 sm:w-18">
             <ShieldCheck size={36} />
           </div>
           <div className="text-center">
@@ -61,7 +61,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <Card className="w-full rounded-[2rem] border border-default-200 bg-surface/60 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.1)] backdrop-blur-xl dark:shadow-none sm:rounded-[2.5rem] sm:p-10">
+        <Card className="w-full rounded-xl border border-default-200 bg-surface/60 p-6 shadow-lg backdrop-blur-xl dark:shadow-none sm:p-8">
           <Card.Header className="flex justify-center pb-5 pt-1 px-0 flex-col items-center gap-2">
             <Card.Title className="text-2xl font-black">
               Welcome Back

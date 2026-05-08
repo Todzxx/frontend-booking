@@ -57,7 +57,7 @@ function App() {
               </Route>
             </Routes>
           </main>
-          <footer className="w-full flex items-center justify-center py-10 border-t border-default-100 bg-background/50 backdrop-blur-sm">
+          <footer className="w-full flex items-center justify-center py-6 border-t border-default-100 bg-background/50 backdrop-blur-sm">
             <div className="flex flex-col items-center gap-2">
               <p className="text-default-400 text-xs font-medium">
                 © 2026 RoomSync Booking System

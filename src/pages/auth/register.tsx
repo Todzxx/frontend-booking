@@ -41,7 +41,7 @@ export default function RegisterPage() {
     <div className="flex flex-col justify-center items-center h-[calc(100vh-8rem)]">
       <div className="w-full max-w-md space-y-8">
         <div className="flex flex-col items-center gap-4 mb-2">
-          <div className="p-4 bg-secondary rounded-3xl shadow-2xl shadow-secondary/40 -rotate-3 text-white">
+          <div className="p-4 bg-secondary rounded-xl shadow-2xl shadow-secondary/40 -rotate-3 text-white">
             <UserPlus size={40} />
           </div>
           <div className="text-center">
@@ -54,7 +54,7 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        <Card className="w-full p-10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-none border border-default-200 bg-surface/60 backdrop-blur-xl rounded-[2.5rem]">
+        <Card className="w-full p-8 shadow-lg dark:shadow-none border border-default-200 bg-surface/60 backdrop-blur-xl rounded-xl">
           <Card.Header className="flex justify-center pb-6 pt-2 px-0 flex-col items-center gap-2">
             <Card.Title className="text-2xl font-black">
               Create Account

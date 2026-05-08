@@ -367,12 +367,12 @@ export default function FacilitiesPage() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-96 bg-default-100 rounded-3xl animate-pulse"
+              className="h-96 bg-default-100 rounded-xl animate-pulse"
             />
           ))}
         </div>
       ) : filteredFacilities.length === 0 ? (
-        <Card className="p-20 flex flex-col items-center justify-center text-center bg-default-50/50 border-dashed border-2 border-default-200 rounded-3xl">
+        <Card className="p-20 flex flex-col items-center justify-center text-center bg-default-50/50 border-dashed border-2 border-default-200 rounded-xl">
           <MapPin className="text-default-300 mb-4" size={48} />
           <p className="text-muted text-lg font-bold">No facilities found.</p>
         </Card>
@@ -381,7 +381,7 @@ export default function FacilitiesPage() {
           {filteredFacilities.map((facility) => (
             <Card
               key={facility.id}
-              className="group overflow-hidden rounded-3xl hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 border border-default-200 bg-background/60 backdrop-blur-md"
+              className="group overflow-hidden rounded-xl hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 border border-default-200 bg-background/60 backdrop-blur-md"
             >
               <div className="h-48 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
@@ -486,11 +486,11 @@ export default function FacilitiesPage() {
         </Modal.Trigger>
         <Modal.Backdrop variant="blur">
           <Modal.Container scroll="inside">
-            <Modal.Dialog className="max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden rounded-[2.5rem] border border-default-200 bg-surface/90 backdrop-blur-xl p-2">
+            <Modal.Dialog className="max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden rounded-xl border border-default-200 bg-surface/90 backdrop-blur-xl p-2">
               {({ close }) => (
                 <div className="p-6 flex flex-col flex-1 min-h-0 overflow-y-auto">
                   <Modal.Header className="flex flex-col gap-1 items-center text-center px-4 pt-4">
-                    <div className="w-16 h-16 rounded-3xl bg-primary/10 text-primary flex items-center justify-center mb-4">
+                    <div className="w-16 h-16 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4">
                       <Calendar size={32} />
                     </div>
                     <Modal.Heading className="text-3xl font-black tracking-tight">
@@ -523,12 +523,12 @@ export default function FacilitiesPage() {
                     )}
 
                     {!(isEditMode || isCreateMode) && (
-                      <div className="space-y-3 rounded-3xl border border-default-200 bg-default-50/70 p-4">
+                      <div className="space-y-3 rounded-xl border border-default-200 bg-default-50/70 p-4">
                         <div className="flex items-center justify-between gap-3">
                           <div>
-                            <label className="text-sm font-black text-default-700">
+                            <p className="text-sm font-black text-default-700">
                               Slot Availability
-                            </label>
+                            </p>
                             <p className="text-[11px] font-bold text-default-400">
                               Booked times for the selected date.
                             </p>
@@ -743,13 +743,17 @@ export default function FacilitiesPage() {
                           </TextField>
 
                           <div className="flex flex-col gap-2">
-                            <label className="text-sm font-black text-default-700 ml-1">
+                            <label
+                              className="text-sm font-black text-default-700 ml-1"
+                              htmlFor="facility-image"
+                            >
                               Facility Image
                             </label>
                             <input
                               accept="image/*"
                               aria-label="Facility image upload"
                               className="text-xs text-default-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                              id="facility-image"
                               type="file"
                               onChange={(e) => {
                                 const file = e.target.files?.[0] || null;
