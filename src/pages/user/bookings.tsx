@@ -12,7 +12,7 @@ export default function BookingsPage() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await api.get("/bookings/me");
+        const response = await api.get("/bookings/my");
 
         setBookings(response.data.data.bookings);
       } catch {
