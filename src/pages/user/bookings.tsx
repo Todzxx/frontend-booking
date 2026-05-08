@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { Card, Chip, Button, Modal, Checkbox, Label } from "@heroui/react";
+import { Card, Chip, Button, Modal, Checkbox, Label, useOverlayState } from "@heroui/react";
 import {
   ClipboardList,
   Calendar,
@@ -31,8 +31,8 @@ function exportMyBookingsCSV(bookings: any[]) {
     b.id,
     `"${(b.purpose ?? "").replace(/"/g, '""')}"`,
     `"${b.facility?.name ?? ""}"`,
-    new Date(b.startTime).toLocaleString("id-ID"),
-    new Date(b.endTime).toLocaleString("id-ID"),
+    new Date(b.startTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+    new Date(b.endTime).toLocaleString("id-ID", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
     b.status,
     b.recurrenceGroupId ? "Yes" : "No",
   ]);
@@ -54,7 +54,7 @@ export default function BookingsPage() {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   // Cancellation Modal State
-  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const cancelModalState = useOverlayState();
   const [cancelAll, setCancelAll] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
 
@@ -85,7 +85,7 @@ export default function BookingsPage() {
       // Backend expects cancelAll in query params
       await api.patch(`/bookings/${id}/cancel?cancelAll=${all}`);
       await fetchBookings(); // Refresh data setelah berhasil
-      setIsCancelModalOpen(false);
+      cancelModalState.close();
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("Error cancelling booking", err);
@@ -351,7 +351,7 @@ export default function BookingsPage() {
                       onPress={() => {
                         setSelectedBooking(booking);
                         setCancelAll(false);
-                        setIsCancelModalOpen(true);
+                        cancelModalState.open();
                       }}
                     >
                       Cancel
@@ -371,12 +371,8 @@ export default function BookingsPage() {
       )}
 
       {/* Cancellation Modal */}
-      <Modal>
-        <Modal.Backdrop
-          isOpen={isCancelModalOpen}
-          variant="blur"
-          onOpenChange={setIsCancelModalOpen}
-        >
+      <Modal state={cancelModalState}>
+        <Modal.Backdrop variant="blur">
           <Modal.Container scroll="inside">
             <Modal.Dialog className="max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden rounded-[2.5rem] border border-default-200 bg-surface/90 backdrop-blur-xl p-2">
               {({ close }) => (
